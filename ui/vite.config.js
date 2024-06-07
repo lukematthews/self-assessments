@@ -11,4 +11,7 @@ export default defineConfig({
       // with options: http://localhost:5173/api/bar-> http://jsonplaceholder.typicode.com/bar
     },
   },
+  build: {
+    outDir: "../dist/ui"
+  }
 })
