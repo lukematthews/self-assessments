@@ -185,6 +185,7 @@ const AssessmentModal = ({
                 <textarea
                   className="form-control w-100"
                   value={assessmentValue}
+                  rows="10"
                   onChange={(e) => {
                     setAssessmentValue(e.target.value);
                   }}

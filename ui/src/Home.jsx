@@ -1,10 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
 import { format, parseISO } from "date-fns";
-import {
-  FetchAllAssessments,
-  FetchItemRefDescriptions,
-} from "./ApiService";
+import { FetchAllAssessments, FetchItemRefDescriptions } from "./ApiService";
 import "./Home.css";
 import Markdown from "react-markdown";
 import AssessmentModal from "./AssessmentModal";
@@ -17,6 +14,7 @@ export function FormatDate(dateString, pattern) {
 function Home() {
   const [assessments, setAssessments] = useState([]);
   const [itemRefDescriptions, setItemRefDescriptions] = useState([]);
+  const [criteriaActionVisibility, setCriteriaActionVisibility] = useState({});
   const [show, setShow] = useState(false);
   const [assessmentId, setAssessmentId] = useState("");
   const [criteriaId, setCriteriaId] = useState("");
@@ -33,10 +31,22 @@ function Home() {
     setShow(true);
   };
 
+  const loadCriteriaResults = (response) => {
+    response.forEach((item) => {
+      item.actionsVisible = false;
+    });
+    setItemRefDescriptions(response);
+  };
+
   useEffect(() => {
     FetchAllAssessments(setAssessments);
-    FetchItemRefDescriptions(setItemRefDescriptions);
+    FetchItemRefDescriptions(loadCriteriaResults);
   }, []);
+
+  const toggleHover = (criteria) => {
+    criteria.actionsVisible = !criteria.actionsVisible;
+    setItemRefDescriptions([...itemRefDescriptions]);
+  };
 
   const assessmentRow = (assessmentGroup) => {
     return (
@@ -106,13 +116,39 @@ function Home() {
             <Col
               key={"item-" + index}
               lg="3"
-              onClick={() => {
-                setAssessmentId(null);
-                setCriteriaId(item._id.toString());
-                setShow(true);
-              }}
+              className={`criteria`}
+              onMouseEnter={() => toggleHover(item)}
+              onMouseLeave={() => toggleHover(item)}
             >
-              <Markdown>{item.formattedDescription}</Markdown>
+              <div
+                id={`criteria-button-row-${item._id}`}
+                className="criteria-definition"
+              >
+                <div className="criteria-definition-description">
+                  <Markdown>{item.formattedDescription}</Markdown>
+                </div>
+                <div className="criteria-definition-actions">
+                  <div className="criteria-defintion-actions-fill"></div>
+                  <div
+                    className={
+                      item.actionsVisible
+                        ? "cd-actions-show"
+                        : "cd-actions-hide"
+                    }
+                  >
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setAssessmentId(null);
+                        setCriteriaId(item._id.toString());
+                        setShow(true);
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </Col>
           );
         })}
