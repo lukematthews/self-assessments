@@ -3,11 +3,16 @@ services:
     hostname: selfassessments-ui
     build: 
       context: ./ui
+      tags:
+        - "lukematthews/selfassessments-ui:latest"
     ports:
       - "80:80"
+    
   api:
     hostname: selfassessments-api
     build: 
       context: ./api
+      tags:
+        - "lukematthews/selfassessments-api:latest"
     ports:
       - "3000"
