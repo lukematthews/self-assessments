@@ -1,11 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
-import { Col, Container, Row, Table } from "react-bootstrap";
-import { format, parseISO } from "date-fns";
+import { Col, Container, Row } from "react-bootstrap";
+import { format, parse, parseISO } from "date-fns";
 import { FetchAllAssessments, FetchItemRefDescriptions } from "./ApiService";
 import "./Home.css";
 import Markdown from "react-markdown";
 import AssessmentModal from "./AssessmentModal";
 import { Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 
 export function FormatDate(dateString, pattern) {
   return format(parseISO(dateString), pattern ? pattern : "PPPP");
@@ -14,7 +15,6 @@ export function FormatDate(dateString, pattern) {
 function Home() {
   const [assessments, setAssessments] = useState([]);
   const [itemRefDescriptions, setItemRefDescriptions] = useState([]);
-  const [criteriaActionVisibility, setCriteriaActionVisibility] = useState({});
   const [show, setShow] = useState(false);
   const [assessmentId, setAssessmentId] = useState("");
   const [criteriaId, setCriteriaId] = useState("");
@@ -39,39 +39,65 @@ function Home() {
   };
 
   useEffect(() => {
-    FetchAllAssessments(setAssessments);
+    // FetchAllAssessments(setAssessments);
+    FetchAllAssessments(loadAssessments);
     FetchItemRefDescriptions(loadCriteriaResults);
   }, []);
+
+  const loadAssessments = (data) => {
+    data.forEach(item => {
+      item.date = parse(item.assessmentDate, "yyyy-MM-dd", new Date());
+    });
+    setAssessments(data);
+  }
 
   const toggleHover = (criteria) => {
     criteria.actionsVisible = !criteria.actionsVisible;
     setItemRefDescriptions([...itemRefDescriptions]);
   };
 
-  const assessmentRow = (assessmentGroup) => {
-    return (
-      <tr key={assessmentGroup.assessmentDate}>
-        <td>{FormatDate(assessmentGroup.assessmentDate)}</td>
-        <td>
-          {assessmentGroup.assessments.map((item) => {
-            return (
-              <Fragment key={item.id}>
-                <Button
-                  variant="text"
-                  onClick={() => {
-                    handleShow(item.id.toString());
-                  }}
-                  data-assessment-id={item.id}
-                >
-                  {item.title}
-                </Button>
-              </Fragment>
-            );
-          })}
-        </td>
-      </tr>
-    );
-  };
+  const columns = [
+    {
+      field: "date",
+      headerName: "Date",
+      type: 'date',
+      width: 150,
+      valueFormatter: (assessmentDate) => {
+        if (!assessmentDate) {
+          return assessmentDate;
+        }
+        return format(assessmentDate, "PPPP");
+      },
+    },
+    {
+      field: "assessments",
+      headerName: "Criteria",
+      display: "flex",
+      // width: 300,
+      flex: 1,
+      renderCell: (data) => {
+        return (
+          <div>
+            {data.row.assessments.map((item) => {
+              return (
+                <Fragment key={item.id}>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      handleShow(item.id.toString());
+                    }}
+                    data-assessment-id={item.id}
+                  >
+                    {item.title}
+                  </Button>
+                </Fragment>
+              );
+            })}
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <Container>
@@ -88,23 +114,13 @@ function Home() {
           </p>
         </Col>
       </Row>
+
       <Row>
         <Col lg="12">
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Criteria</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assessments.map((a) => {
-                return assessmentRow(a);
-              })}
-            </tbody>
-          </Table>
+          <DataGrid rows={assessments} columns={columns} getRowHeight={() => 'auto'}/>
         </Col>
       </Row>
+
       <Row>
         <Col lg="12">
           <h3>Criteria</h3>

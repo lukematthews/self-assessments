@@ -1,0 +1,13 @@
+services:
+  ui:
+    hostname: selfassessments-ui
+    build: 
+      context: ./ui
+    ports:
+      - "80:80"
+  api:
+    hostname: selfassessments-api
+    build: 
+      context: ./api
+    ports:
+      - "3000"

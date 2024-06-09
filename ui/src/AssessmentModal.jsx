@@ -137,7 +137,7 @@ const AssessmentModal = ({
   };
 
   return (
-    <Modal show={show} onHide={handleClose} className="modal-xl">
+    <Modal show={show} onHide={handleClose} onExited={handleClose} className="modal-xl">
       <ModalHeader closeButton>
         <ModalTitle>{getCriteriaTitle()}</ModalTitle>
       </ModalHeader>

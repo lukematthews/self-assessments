@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const uiController = require('../controllers/UiController');
+const uiController = require('../controllers/uiController');
 
 router.route('/list').get(uiController.getAssessmentList);
 router.route('/edit/:id').get(uiController.editAssessment);

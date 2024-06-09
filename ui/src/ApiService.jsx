@@ -55,5 +55,8 @@ export const FetchAllAssessments = async (setAssessments) => {
 };
 
 export const FetchItemRefDescriptions = async (setItemRefDescriptions) => {
-    await axios.get("/ui/item-refs").then((response) => setItemRefDescriptions(response.data));
+    await axios.get("/ui/item-refs").then((response) => setItemRefDescriptions(response.data)).catch((error) => {
+      // console.log(`Error fetching criteria: ${error}`);
+      setItemRefDescriptions([])
+    });
 }
