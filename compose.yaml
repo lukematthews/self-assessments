@@ -1,6 +1,7 @@
 services:
   ui:
     hostname: selfassessments-ui
+    container_name: ui
     build: 
       context: ./ui
       tags:
@@ -10,6 +11,7 @@ services:
     
   api:
     hostname: selfassessments-api
+    container_name: api
     build: 
       context: ./api
       tags:

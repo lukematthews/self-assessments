@@ -1,0 +1,14 @@
+services:
+  ui:
+    image: lukematthews/selfassessments-ui
+    container_name: ui
+    hostname: selfassessments-ui
+    ports:
+      - "80:80"
+    
+  api:
+    image: lukematthews/selfassessments-api
+    container_name: api
+    hostname: selfassessments-api
+    ports:
+      - "3000"
