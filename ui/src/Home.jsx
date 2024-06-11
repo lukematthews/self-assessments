@@ -20,9 +20,7 @@ function Home() {
   const [criteriaId, setCriteriaId] = useState("");
 
   const handleClose = () => {
-    FetchAllAssessments(setAssessments).then((result) =>
-      setAssessments(result)
-    );
+    FetchAllAssessments(loadAssessments);
     setShow(false);
   };
   const handleShow = (assessmentId) => {
@@ -39,7 +37,6 @@ function Home() {
   };
 
   useEffect(() => {
-    // FetchAllAssessments(setAssessments);
     FetchAllAssessments(loadAssessments);
     FetchItemRefDescriptions(loadCriteriaResults);
   }, []);
