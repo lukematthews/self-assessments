@@ -16,6 +16,7 @@ const getAssessmentList = async (req, res) => {
     return {
       id: assessment.id,
       title: criteriaMap[assessment.criteria].title,
+      criteriaId: criteriaMap[assessment.criteria]._id,
       assessmentDate: assessment.assessmentDate,
       value: assessment.value,
     };
@@ -40,7 +41,7 @@ const getAssessmentList = async (req, res) => {
       assessmentDate: dateKey,
       title: groupedAssessments[dateKey].map((item) => item.title).join(", "),
       assessments: groupedAssessments[dateKey].map((assessment) => {
-        return { id: assessment.id, title: assessment.title };
+        return { id: assessment.id, title: assessment.title, criteriaId: assessment.criteriaId };
       }),
     };
   });
