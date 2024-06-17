@@ -86,7 +86,6 @@ function Home() {
         return (
           <div>
             {data.row.assessments.filter(item => criteriaVisibility[item.criteriaId]).map((item) => {
-              console.log(`${item.title} ${item.criteriaId} ${criteriaVisibility[item.criteriaId]}`)
               return (
                 <Fragment key={item.id}>
                   <Button

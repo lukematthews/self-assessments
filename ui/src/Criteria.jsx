@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Col } from "react-bootstrap";
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import Markdown from "react-markdown";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import AddIcon from '@mui/icons-material/Add';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import { useNavigate } from "react-router";
 
 const Criteria = (props) => {
     let toggleHover = props.toggleHover;
@@ -11,6 +14,7 @@ const Criteria = (props) => {
     let addClicked = props.addClicked;
     let visibleClicked = props.visibleClicked;
     const [visible, setVisible] = useState(true);
+    const navigate = useNavigate();
 
     return (
         <Col
@@ -28,27 +32,29 @@ const Criteria = (props) => {
                 </div>
                 <div className="criteria-definition-actions pb-2">
                     <div className="criteria-defintion-actions-fill"></div>
-                    <div
-                        className={
-                            item.actionsVisible
-                                ? "cd-actions-show"
-                                : "cd-actions-hide"
-                        }
-                    >
-                        <Button variant="outlined" onClick={() => {
-                            setVisible(!visible);
-                            visibleClicked(item._id.toString(), !visible);
-                        }}>
+                    <div>
+                        <IconButton variant="contained" color="primary" size="small"
+                            onClick={() => {
+                                setVisible(!visible);
+                                visibleClicked(item._id.toString(), !visible);
+                            }}>
                             {visible ? <VisibilityIcon></VisibilityIcon> : <VisibilityOffIcon></VisibilityOffIcon>}
-                        </Button>
-                        <Button
-                            variant="outlined"
+                        </IconButton>
+                        <IconButton variant="contained" color="primary" size="small"
+                            onClick={() => {
+                                navigate(`/criteria/${item.title}`)
+                            }}>
+                            <OpenInFullIcon></OpenInFullIcon>
+                        </IconButton>
+                        <IconButton
+                            color="success"
+                            variant="contained"
                             onClick={() => {
                                 addClicked(item._id.toString());
                             }}
                         >
-                            Add
-                        </Button>
+                            <AddIcon></AddIcon>
+                        </IconButton>
 
                     </div>
                 </div>

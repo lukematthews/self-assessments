@@ -21,6 +21,20 @@ export const FetchAssessment = async (id, setAssessment) => {
   });
 };
 
+export const FetchCriteria = async (name, setCriteria) => {
+  return axios.get(`/ui/criteria/${name}`).then((response) => {
+    setCriteria(response.data);
+    return response.data;
+  });
+}
+
+export const FetchAssessmentsForCriteria = async (id, setAssessments) => {
+  return axios.get(`/ui/assessments/criteria/${id}`).then((response) => {
+    setAssessments(response.data);
+    return response.data;
+  });
+}
+
 export const CreateNewAssessment = (event, successCallback, errorCallback) => {
   let newAssessment = { ...event };
   axios.post("/api/", newAssessment).then((response) => {

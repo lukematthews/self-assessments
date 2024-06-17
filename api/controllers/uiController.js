@@ -121,6 +121,12 @@ const getAssessment = async (req, res) => {
   res.json(renderedAssessment);
 };
 
+
+const getAssessmentsForCriteria = async (req, res) => {
+  const assessments = await Model.CriteriaAssessment.find({criteria: req.params.id});
+  res.json(assessments);
+}
+
 const editAssessment = async (req, res) => {
   console.log(req.params);
   const assessment = await Model.Assessment.findById(req.params.id).exec();
@@ -154,6 +160,17 @@ const getItemRefs = async (req, res) => {
   res.json(items);
 };
 
+const getCriteriaForName = async (req, res) => {
+  let criteria = await Model.CriteriaDefinition.findOne({title: req.params.name}).collation({ locale: 'en', strength: 2 });
+  res.json({
+    formattedDescription: `***${criteria.title}*** ${criteria.description}`,
+    title: criteria.title,
+    description: criteria.description,
+    _id: criteria._id,
+  });
+
+}
+
 module.exports = {
   getAssessmentList,
   editAssessment,
@@ -161,4 +178,6 @@ module.exports = {
   getItemRefs,
   getAssessmentsGroupedByDate,
   getAssessment,
+  getCriteriaForName,
+  getAssessmentsForCriteria
 };
