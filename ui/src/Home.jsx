@@ -3,10 +3,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import { format, parse, parseISO } from "date-fns";
 import { FetchAllAssessments, FetchItemRefDescriptions } from "./ApiService";
 import "./Home.css";
-import Markdown from "react-markdown";
 import AssessmentModal from "./AssessmentModal";
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import Criteria from "./Criteria";
+
 
 export function FormatDate(dateString, pattern) {
   return format(parseISO(dateString), pattern ? pattern : "PPPP");
@@ -18,6 +19,8 @@ function Home() {
   const [show, setShow] = useState(false);
   const [assessmentId, setAssessmentId] = useState("");
   const [criteriaId, setCriteriaId] = useState("");
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [criteriaVisibility, setCriteriaVisibility] = useState({});
 
   const handleClose = () => {
     FetchAllAssessments(loadAssessments);
@@ -30,15 +33,18 @@ function Home() {
   };
 
   const loadCriteriaResults = (response) => {
+    let visibility = {};
     response.forEach((item) => {
       item.actionsVisible = false;
+      visibility[item._id] = true;
     });
     setItemRefDescriptions(response);
+    setCriteriaVisibility(visibility);
   };
 
   useEffect(() => {
     FetchAllAssessments(loadAssessments);
-    FetchItemRefDescriptions(loadCriteriaResults);
+    FetchItemRefDescriptions(loadCriteriaResults, criteriaDefinitionsErrorCallback);
   }, []);
 
   const loadAssessments = (data) => {
@@ -46,10 +52,15 @@ function Home() {
       item.date = parse(item.assessmentDate, "yyyy-MM-dd", new Date());
     });
     setAssessments(data);
+    setLoadFailed(false);
   }
 
-  const toggleHover = (criteria) => {
-    criteria.actionsVisible = !criteria.actionsVisible;
+  const criteriaDefinitionsErrorCallback = (error) => {
+    setLoadFailed(true);
+  }
+
+  const toggleHover = (criteria, visible) => {
+    criteria.actionsVisible = visible;
     setItemRefDescriptions([...itemRefDescriptions]);
   };
 
@@ -70,12 +81,11 @@ function Home() {
       field: "assessments",
       headerName: "Criteria",
       display: "flex",
-      // width: 300,
       flex: 1,
       renderCell: (data) => {
         return (
           <div>
-            {data.row.assessments.map((item) => {
+            {data.row.assessments.filter(item => criteriaVisibility[item.criteriaId]).map((item) => {
               return (
                 <Fragment key={item.id}>
                   <Button
@@ -111,10 +121,9 @@ function Home() {
           </p>
         </Col>
       </Row>
-
       <Row>
         <Col lg="12">
-          <DataGrid rows={assessments} columns={columns} getRowHeight={() => 'auto'}/>
+          <DataGrid rows={assessments} columns={columns} getRowHeight={() => 'auto'} />
         </Col>
       </Row>
 
@@ -124,47 +133,25 @@ function Home() {
         </Col>
       </Row>
       <Row>
-        {itemRefDescriptions.map((item, index) => {
-          return (
-            <Col
-              key={"item-" + index}
-              lg="3"
-              className={`criteria`}
-              onMouseEnter={() => toggleHover(item)}
-              onMouseLeave={() => toggleHover(item)}
-            >
-              <div
-                id={`criteria-button-row-${item._id}`}
-                className="criteria-definition"
-              >
-                <div className="criteria-definition-description">
-                  <Markdown>{item.formattedDescription}</Markdown>
-                </div>
-                <div className="criteria-definition-actions">
-                  <div className="criteria-defintion-actions-fill"></div>
-                  <div
-                    className={
-                      item.actionsVisible
-                        ? "cd-actions-show"
-                        : "cd-actions-hide"
-                    }
-                  >
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        setAssessmentId(null);
-                        setCriteriaId(item._id.toString());
-                        setShow(true);
-                      }}
-                    >
-                      Add
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Col>
-          );
+        {itemRefDescriptions.map((item) => {
+          return (<Criteria key={`item.${item._id}`} item={item} toggleHover={toggleHover}
+            visibleClicked={(item_id, visible) => {
+              let updatedVisibility = {...criteriaVisibility};
+              updatedVisibility[item_id] = visible;
+              setCriteriaVisibility(updatedVisibility)
+            }}
+            addClicked={(item_id) => {
+              setAssessmentId(null);
+              setCriteriaId(item_id);
+              setShow(true);
+            }} ></Criteria>);
         })}
+      </Row>
+      <Row className={loadFailed ? "visible" : "invisible"}>
+        <Col lg="12">
+          <h1>Oh oh!</h1>
+          <p>Couldn't reach the server</p>
+        </Col>
       </Row>
       <Row>
         <Col>

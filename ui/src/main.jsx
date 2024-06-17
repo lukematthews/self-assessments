@@ -5,32 +5,28 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import App from "./App.jsx";
+import Home from "./Home.jsx";
+import CriteriaPage from "./CriteriaPage.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App></App>,
+    children: [{
+      path: "criteria/:criteriaName",
+      element: <CriteriaPage></CriteriaPage>
+    },
+    {
+      path: "/",
+      element: <Home></Home>
+    }]
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Container>
-      <Row className="mb-5">
-        <Col lg="12">
-          <a className="h1" href="/" style={{textDecoration:"none"}}>
-            Self Assessments
-          </a>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <RouterProvider router={router}></RouterProvider>
-        </Col>
-      </Row>
-    </Container>
+    <RouterProvider router={router}></RouterProvider>
   </React.StrictMode>
 );
