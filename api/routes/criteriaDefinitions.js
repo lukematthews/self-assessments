@@ -4,12 +4,13 @@ const criteriaDefinitionController = require("../controllers/criteriaDefinitionC
 
 router
   .route("/")
-  .get(criteriaDefinitionController.getAllItems)
-  .post(criteriaDefinitionController.createNewItems)
-  .put(criteriaDefinitionController.updateItem)
-  .delete(criteriaDefinitionController.deleteItem);
+  .get(criteriaDefinitionController.getAllCriteria)
+  .post(criteriaDefinitionController.createNewItems);
 
-router.route("/:id").get(criteriaDefinitionController.getItem);
+router.route("/:id")
+  .get(criteriaDefinitionController.getCriteria)
+  .put(criteriaDefinitionController.updateCriteria)
+  .delete(criteriaDefinitionController.deleteCriteria);
 router.route("/clear").delete(criteriaDefinitionController.deleteAll);
 
 module.exports = router;

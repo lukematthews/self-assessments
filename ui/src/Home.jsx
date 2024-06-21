@@ -1,13 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { format, parse, parseISO } from "date-fns";
-import { FetchAllAssessments, FetchItemRefDescriptions } from "./ApiService";
+import { FetchAllAssessments, FetchCriteriaDescriptions } from "./ApiService";
 import "./Home.css";
 import AssessmentModal from "./AssessmentModal";
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Criteria from "./Criteria";
-
+import { purple } from '@mui/material/colors';
 
 export function FormatDate(dateString, pattern) {
   return format(parseISO(dateString), pattern ? pattern : "PPPP");
@@ -44,7 +44,7 @@ function Home() {
 
   useEffect(() => {
     FetchAllAssessments(loadAssessments);
-    FetchItemRefDescriptions(loadCriteriaResults, criteriaDefinitionsErrorCallback);
+    FetchCriteriaDescriptions(loadCriteriaResults, criteriaDefinitionsErrorCallback);
   }, []);
 
   const loadAssessments = (data) => {

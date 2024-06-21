@@ -27,6 +27,11 @@
     display: flex;
 }
 
+.all-page-criteria {
+    display: flex;
+    width: "80%";
+}
+
 .cd-actions-show {
     display: flex;
     visibility: visible;

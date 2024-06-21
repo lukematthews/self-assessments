@@ -41,7 +41,67 @@ const getAssessmentList = async (req, res) => {
       assessmentDate: dateKey,
       title: groupedAssessments[dateKey].map((item) => item.title).join(", "),
       assessments: groupedAssessments[dateKey].map((assessment) => {
-        return { id: assessment.id, title: assessment.title, criteriaId: assessment.criteriaId };
+        return {
+          id: assessment.id,
+          title: assessment.title,
+          criteriaId: assessment.criteriaId,
+        };
+      }),
+    };
+  });
+
+  if (!groupedAssessments) {
+    return res.statusCode(204).json({ message: "No items found" });
+  }
+  res.json(groupedAssessments);
+};
+
+
+const getAssessmentListWithContent = async (req, res) => {
+  console.log("Get Items");
+  const items = await Model.CriteriaAssessment.find();
+  const criteria = await Model.CriteriaDefinition.find();
+
+  const criteriaMap = criteria.reduce((map, item) => {
+    map[item._id.toString()] = item;
+    return map;
+  }, {});
+
+  const uiItems = items.map((assessment) => {
+    return {
+      id: assessment.id,
+      title: criteriaMap[assessment.criteria].title,
+      criteriaId: criteriaMap[assessment.criteria]._id,
+      assessmentDate: assessment.assessmentDate,
+      value: assessment.value,
+    };
+  });
+
+  // now group them by day...
+  let groupedAssessments = uiItems.reduce((map, item) => {
+    const assessmentDate = f.format(
+      new Date(item.assessmentDate),
+      "yyyy-MM-dd"
+    );
+    if (!map[assessmentDate]) {
+      map[assessmentDate] = [];
+    }
+    map[assessmentDate].push(item);
+    return map;
+  }, {});
+
+  groupedAssessments = Object.keys(groupedAssessments).map((dateKey, index) => {
+    return {
+      id: index,
+      assessmentDate: dateKey,
+      title: groupedAssessments[dateKey].map((item) => item.title).join(", "),
+      assessments: groupedAssessments[dateKey].map((assessment) => {
+        return {
+          id: assessment.id,
+          title: assessment.title,
+          criteriaId: assessment.criteriaId,
+          value: assessment.value,
+        };
       }),
     };
   });
@@ -123,7 +183,9 @@ const getAssessment = async (req, res) => {
 
 
 const getAssessmentsForCriteria = async (req, res) => {
-  const assessments = await Model.CriteriaAssessment.find({criteria: req.params.id});
+  const assessments = await Model.CriteriaAssessment.find({
+    criteria: req.params.id,
+  });
   res.json(assessments);
 }
 
@@ -147,7 +209,7 @@ const newAssessmentTemplate = async (req, res) => {
   res.json({ items: refItems });
 };
 
-const getItemRefs = async (req, res) => {
+const getAllCriteria = async (req, res) => {
   let items = await Model.CriteriaDefinition.find();
   items = items.map((item) => {
     return {
@@ -161,23 +223,52 @@ const getItemRefs = async (req, res) => {
 };
 
 const getCriteriaForName = async (req, res) => {
-  let criteria = await Model.CriteriaDefinition.findOne({title: req.params.name}).collation({ locale: 'en', strength: 2 });
+  let criteria = await Model.CriteriaDefinition.findOne({
+    title: req.params.name,
+  }).collation({ locale: "en", strength: 2 });
   res.json({
     formattedDescription: `***${criteria.title}*** ${criteria.description}`,
     title: criteria.title,
     description: criteria.description,
     _id: criteria._id,
   });
+};
 
-}
+const getNavigationCriteria = async (req, res) => {
+  let items = await Model.CriteriaAssessment.aggregate([
+    {
+      $group: {
+        _id: "$criteria",
+        assessmentCount: {
+          $sum: 1,
+        },
+      },
+    },
+  ]).exec();
+  let criteria = await Model.CriteriaDefinition.find();
+  let flatItems = {};
+  items.forEach(item => {
+    flatItems[item._id] = item;
+  });
+  items = criteria.map(c => {
+    return {
+      "_id": c._id,
+      "title": c.title,
+      "assessmentCount": flatItems[c._id.toString()].assessmentCount
+    }
+  });
+  res.json(items);
+};
 
 module.exports = {
   getAssessmentList,
   editAssessment,
   newAssessmentTemplate,
-  getItemRefs,
+  getAllCriteria,
   getAssessmentsGroupedByDate,
   getAssessment,
   getCriteriaForName,
-  getAssessmentsForCriteria
+  getAssessmentsForCriteria,
+  getNavigationCriteria,
+  getAssessmentListWithContent,
 };

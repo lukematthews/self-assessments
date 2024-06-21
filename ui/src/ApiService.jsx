@@ -1,7 +1,7 @@
 import axios from "axios";
 import { format } from "date-fns";
 
-export const  FetchTemplate = async (setTemplate) => {
+export const FetchTemplate = async (setTemplate) => {
   await axios.get("/ui/new").then((response) => {
     setTemplate({
       title: "A new assessment",
@@ -68,10 +68,25 @@ export const FetchAllAssessments = async (setAssessments) => {
   });
 };
 
-export const FetchItemRefDescriptions = async (setItemRefDescriptions, errorCallback) => {
-    await axios.get("/ui/item-refs").then((response) => setItemRefDescriptions(response.data)).catch((error) => {
-      // console.log(`Error fetching criteria: ${error}`);
-      setItemRefDescriptions([]);
+export const FetchAllAssessmentsWithValues = async (setAssessments) => {
+  return axios.get("/ui/list-with-values").then((response) => {
+    setAssessments(response.data.map(item => item));
+    return response.data
+  });
+};
+
+export const FetchNavigation = async (setCriteria) => {
+  return axios.get("/ui/navigation").then((response) => {
+    setCriteria(response.data.map(item => item));
+    return response.data
+  });
+};
+
+export async function FetchCriteriaDescriptions(setCriteriaDescriptions, errorCallback) {
+  await axios.get("/ui/criteria")
+    .then((response) => setCriteriaDescriptions(response.data))
+    .catch((error) => {
+      setCriteriaDescriptions([]);
       if (errorCallback) {
         errorCallback(error);
       }

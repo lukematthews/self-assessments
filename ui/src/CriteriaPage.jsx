@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import Markdown from "react-markdown";
 import { useParams } from "react-router";
@@ -14,7 +14,7 @@ const CriteriaPage = (props) => {
 
     useEffect(() => {
         FetchCriteria(params.criteriaName, loadAssessments);
-    }, []);
+    }, [params.criteriaName]);
 
     const loadAssessments = (response) => {
         setCriteria(response);
@@ -36,7 +36,7 @@ const CriteriaPage = (props) => {
         </Row>
         {
             assessments.map(assessment => {
-                return (<>
+                return (<React.Fragment key={assessment._id}>
                     <Row className="bg-secondary">
                         <Col lg="12" className="fw-bold fst-italic p-1">
                             Date: {FormatDate(assessment.assessmentDate)}
@@ -51,11 +51,10 @@ const CriteriaPage = (props) => {
                             </Markdown>
                         </Col>
                     </Row>
-                </>);
+                </React.Fragment>);
             })
         }
         <Row>
-
         </Row>
     </>
     );

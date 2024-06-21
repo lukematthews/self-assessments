@@ -7,6 +7,7 @@ import '@fontsource/roboto/700.css';
 import App from "./App.jsx";
 import Home from "./Home.jsx";
 import CriteriaPage from "./CriteriaPage.jsx";
+import AllPage from "./AllPage.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
     children: [{
       path: "criteria/:criteriaName",
       element: <CriteriaPage></CriteriaPage>
+    },
+    {
+      path: "/all",
+      element: <AllPage></AllPage>
     },
     {
       path: "/",

@@ -1,7 +1,7 @@
 const Model = require("../model/Model");
 
-const getAllItems = async (req, res) => {
-  console.log("Get Items");
+const getAllCriteria = async (req, res) => {
+  console.log("Get Criteria");
   const items = await Model.CriteriaDefinition.find();
   if (!items) {
     return res.statusCode(204).json({ message: "No items found" });
@@ -37,8 +37,8 @@ const createNewItems = async (req, res) => {
   }
 };
 
-const updateItem = async (req, res) => {
-  if (!req?.body?.id) {
+const updateCriteria = async (req, res) => {
+  if (!req?.params?.id) {
     return res.status(400).json({ message: "ID parameter is required" });
   }
   const criteria = await Model.CriteriaDefinition.findOne({ _id: req.body.id }).exec();
@@ -55,7 +55,7 @@ const updateItem = async (req, res) => {
   res.json(result);
 };
 
-const deleteItem = async (req, res) => {
+const deleteCriteria = async (req, res) => {
   if (!req?.body?.id) {
     return res.status(400).json({ message: "ID parameter is required" });
   }
@@ -75,7 +75,7 @@ const deleteAll = async (req, res) => {
   res.json(result);
 }
 
-const getItem = async (req, res) => {
+const getCriteria = async (req, res) => {
   if (!req?.params?.id) {
     return res.status(400).json({ message: "ID parameter is required" });
   }
@@ -90,5 +90,5 @@ const getItem = async (req, res) => {
 };
 
 module.exports = {
-  getAllItems, createNewItems, updateItem, deleteItem, getItem, deleteAll
+  getAllCriteria, createNewItems, updateCriteria, deleteCriteria, getCriteria, deleteAll
 };
