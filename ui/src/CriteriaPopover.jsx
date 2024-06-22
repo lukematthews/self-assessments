@@ -34,6 +34,7 @@ export const CriteriaPopover = (props) => {
         <div className="criteria-popover">
             <Button aria-describedby={id} variant="contained" onClick={handleClick}>
                 {criteria.title}
+                {!visible ? <VisibilityOffIcon style={{paddingLeft: "10px"}}/> : <></>}
             </Button>
             <Popover
                 id={id}
@@ -45,12 +46,12 @@ export const CriteriaPopover = (props) => {
                     horizontal: 'left',
                 }}
             >
-                <Typography px={2} pt={2}><Markdown>{criteria.formattedDescription}</Markdown></Typography>
+                <Markdown>{criteria.formattedDescription}</Markdown>
                 <Typography px={2} py={0}>Hide / Show
                     <IconButton variant="contained" color="primary" size="small"
                         onClick={() => {
                             setVisible(!visible);
-                            visibleClicked(item._id.toString(), !visible);
+                            visibleClicked(criteria._id.toString(), !visible);
                         }}>
                         {visible ? <VisibilityIcon></VisibilityIcon> : <VisibilityOffIcon></VisibilityOffIcon>}
                     </IconButton>
