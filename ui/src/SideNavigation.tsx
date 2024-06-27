@@ -3,28 +3,30 @@ import { List, ListItemButton, ListItemText, Collapse, ListItem } from "@mui/mat
 import { useNavigate } from "react-router";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { FetchCriteriaDescriptions, FetchNavigation } from "./ApiService";
+import { ApiService } from "./ApiService";
 import { purple } from "@mui/material/colors";
+import { NavigationCriteria } from "./model/ui/DisplayTypes";
 
-const SideNavigation = (props) => {
-    const [item, setCriteria] = useState({});
+export default function SideNavigation() {
     const navigate = useNavigate();
     const [open, setOpen] = useState(true);
-    const [itemRefDescriptions, setItemRefDescriptions] = useState([]);
+    const [itemRefDescriptions, setItemRefDescriptions] = useState<NavigationCriteria[]>([]);
+    const [loadFailed, setLoadFailed] = useState(false);
 
     const handleClick = () => {
         setOpen(!open);
     };
 
     useEffect(() => {
-        FetchNavigation(loadCriteriaResults, criteriaDefinitionsErrorCallback);
+        ApiService.FetchNavigation(loadCriteriaResults, criteriaDefinitionsErrorCallback);
     }, []);
 
-    const loadCriteriaResults = (response) => {
+    const loadCriteriaResults = (response: NavigationCriteria[]) => {
         setItemRefDescriptions(response);
     };
 
-    const criteriaDefinitionsErrorCallback = (error) => {
+    const criteriaDefinitionsErrorCallback = (error: string) => {
+        console.log(error);
         setLoadFailed(true);
     }
 
@@ -64,7 +66,7 @@ const SideNavigation = (props) => {
                 </List>
             </Collapse>
         </List>
-        <ListItemButton key={item._id} onClick={() => {
+        <ListItemButton onClick={() => {
             navigate(`/all`)
         }}>
             <ListItemText primary="View All" />
@@ -72,5 +74,3 @@ const SideNavigation = (props) => {
         <List>
         </List></>);
 }
-
-export default SideNavigation;

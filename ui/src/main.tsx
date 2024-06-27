@@ -6,10 +6,12 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import App from "./App.jsx";
 import Home from "./Home.jsx";
-import CriteriaPage from "./CriteriaPage.jsx";
+import CriteriaPage from "./CriteriaPage";
 import AllPage from "./AllPage.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+// import store from './redux/store';
+// import { Provider } from 'react-redux';
 
 const router = createBrowserRouter([
   {
@@ -30,8 +32,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    {/* <Provider store={store}> */}
+      <RouterProvider router={router}></RouterProvider>
+    {/* </Provider> */}
   </React.StrictMode>
 );

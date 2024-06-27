@@ -2,23 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import Markdown from "react-markdown";
 import { useParams } from "react-router";
-import { FetchAssessmentsForCriteria, FetchCriteria } from "./ApiService";
+import { ApiService } from "./ApiService";
 import { FormatDate } from "./Home";
 import remarkGfm from "remark-gfm";
+import Criteria from "./model/Criteria";
+import CriteriaAssessment from "./model/CriteriaAssessment";
 
-const CriteriaPage = (props) => {
-    const [item, setCriteria] = useState({});
-    const [assessments, setAssessments] = useState([]);
-    let params = useParams();
+export default function CriteriaPage() {
+    const [item, setCriteria] = useState<Criteria>({});
+    const [assessments, setAssessments] = useState<CriteriaAssessment[]>([]);
+    const params = useParams();
     console.log(`Criteria name: ${params.criteriaName}`);
 
     useEffect(() => {
-        FetchCriteria(params.criteriaName, loadAssessments);
+        ApiService.FetchCriteria(params.criteriaName!, loadAssessments);
     }, [params.criteriaName]);
 
-    const loadAssessments = (response) => {
+    const loadAssessments = (response: Criteria) => {
         setCriteria(response);
-        FetchAssessmentsForCriteria(response._id, setAssessments);
+        ApiService.FetchAssessmentsForCriteria(response._id, setAssessments);
     }
 
     return (<>
@@ -59,5 +61,3 @@ const CriteriaPage = (props) => {
     </>
     );
 }
-
-export default CriteriaPage;
