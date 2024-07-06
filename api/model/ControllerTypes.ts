@@ -1,4 +1,5 @@
 export type AssessmentGroup = {
+  _id?: string;
   assessmentDate: string;
   title: string;
   assessments: AssessmentUi[];

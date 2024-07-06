@@ -1,26 +1,24 @@
 import { Criteria, CriteriaAssessment, CriteriaAssessmentModel, CriteriaDefinitionModel } from "../model/Model";
-import { format, parse } from "date-fns";
-import express from "express";
+import { format } from "date-fns";
+import { RequestHandler } from "express";
 import { Schema } from "mongoose";
 import { AssessmentGroup, AssessmentUi } from "../model/ControllerTypes";
+import { v4 as uuidv4 } from "uuid";
 
-export async function getAssessmentList(req: express.Request, res: express.Response) {
+export const getAssessmentList: RequestHandler = async (req, res) => {
   const assessments: CriteriaAssessment[] = await CriteriaAssessmentModel.find();
-  const groupedAssessments = createGroupedAssessments(assessments);
-  if (groupedAssessments.size === 0) {
+
+  const groupedAssessments: Map<string, AssessmentGroup | undefined> = createGroupedAssessments(assessments, createCriteriaMap(await CriteriaDefinitionModel.find()));
+  if (!groupedAssessments || groupedAssessments.size === 0) {
     res.status(204).json({ message: "No items found" });
   } else {
-    const data: {
-      [k: string]: any;
-    } = {};
-    Array.from(groupedAssessments.keys()).forEach((key) => {
-      data[key] = groupedAssessments.get(key);
-    });
-    res.json(data);
+    let groupArray: (AssessmentGroup | undefined)[] = Array.from(groupedAssessments.values());
+    groupArray?.forEach((group: AssessmentGroup | undefined) => (group!._id = uuidv4()));
+    res.json(groupArray);
   }
-}
+};
 
-function createCriteriaMap(criteria: Criteria[]) {
+function createCriteriaMap(criteria: Criteria[]): Map<string, Criteria> {
   const criteriaMap: Map<string, Criteria> = new Map();
   criteria.forEach((e) => criteriaMap.set(e._id.toString(), e));
   return criteriaMap;
@@ -31,9 +29,9 @@ function createGroupedAssessments(assessments: CriteriaAssessment[], criteriaMap
   assessments.forEach((assessment) => {
     const assessmentUi: AssessmentUi = {
       _id: assessment._id.toString(),
-      criteriaId: assessment.criteria._id.toString(),
+      criteriaId: assessment.criteria?._id.toString(),
+      title: criteriaMap?.get(assessment.criteria?._id.toString())?.title,
     };
-
     let formattedDate = format(assessment.assessmentDate, "yyyy-MM-dd");
     let assessmentGroup: AssessmentGroup | undefined = groupedAssessments.get(formattedDate);
     if (!assessmentGroup) {
@@ -48,36 +46,36 @@ function createGroupedAssessments(assessments: CriteriaAssessment[], criteriaMap
     }
     const titleSet = new Set<string>();
     if (criteriaMap) {
-      assessmentGroup.assessments.forEach((a) => titleSet.add(criteriaMap.get(a.criteriaId)!.title));
+      assessmentGroup.assessments.forEach((a) => {
+        if (a.criteriaId && criteriaMap.get(a.criteriaId)) {
+          titleSet.add(criteriaMap.get(a.criteriaId)!.title);
+        }
+      });
     }
     assessmentGroup.title = Array.from(titleSet).join(", ");
   });
   return groupedAssessments;
 }
 
-export async function getAssessmentListWithContent(req: express.Request, res: express.Response) {
+export const getAssessmentListWithContent: RequestHandler = async (req, res) => {
   const assessments: CriteriaAssessment[] = await CriteriaAssessmentModel.find();
   const assessmentMap: Map<string, CriteriaAssessment> = new Map();
   assessments.forEach((a) => assessmentMap.set(a._id.toString(), a));
   const groupedAssessments = createGroupedAssessments(assessments, createCriteriaMap(await CriteriaDefinitionModel.find()));
   groupedAssessments.forEach((group) => {
-    group?.assessments?.forEach((a) => (a.value = assessmentMap.get(a._id.toString())?.value));
+    group?.assessments?.forEach((a) => {
+      a.value = assessmentMap.get(a._id.toString())?.value;
+    });
   });
 
   if (groupedAssessments.size === 0) {
     return res.status(204).json({ message: "No items found" });
   }
-  const data: {
-    [k: string]: any;
-  } = {};
-  Array.from(groupedAssessments.keys()).forEach((key) => {
-    data[key] = groupedAssessments.get(key);
-  });
-  res.json(data);
-}
+  res.json(Array.from(groupedAssessments.values()));
+};
 
-export async function getAssessment(req: express.Request, res: express.Response) {
-  if (!req?.params?.id) {
+export const getAssessment: RequestHandler<{id: string}> = async (req, res) => {
+  if (!req.params.id) {
     return res.status(400).json({ message: "ID parameter is required" });
   }
 
@@ -103,35 +101,35 @@ export async function getAssessment(req: express.Request, res: express.Response)
     };
     res.json(renderedAssessment);
   }
-}
+};
 
-export async function getAssessmentsForCriteria(req: express.Request, res: express.Response) {
+export const getAssessmentsForCriteria: RequestHandler<{id: string}> = async (req, res) => {
   const assessments: CriteriaAssessment[] = await CriteriaAssessmentModel.find({
     criteria: req.params.id,
   });
   res.json(assessments);
-}
+};
 
-export async function editAssessment(req: express.Request, res: express.Response) {
+export const editAssessment: RequestHandler<{id: string}> = async (req, res) => {
   const assessment: CriteriaAssessment | null = await CriteriaAssessmentModel.findById(req.params.id);
   // handle assessment not found!
   if (!assessment || assessment === null) return res.status(404).json("Could not find assessment with provided id");
   console.log(`assessmentDate: ${assessment.assessmentDate}`);
   const result: AssessmentUi = {
     _id: assessment._id.toString(),
-    criteriaId: assessment.criteria._id.toString(),
+    criteriaId: assessment.criteria?._id.toString(),
     assessmentDate: format(assessment.assessmentDate, "yyyy-MM-dd"),
   };
   console.log(req.params);
   res.json(result);
-}
+};
 
-export async function newAssessmentTemplate(req: express.Request, res: express.Response) {
+export const newAssessmentTemplate: RequestHandler = async (req, res) => {
   const refItems = await CriteriaDefinitionModel.find();
   res.json({ items: refItems });
-}
+};
 
-export async function getAllCriteria(req: express.Request, res: express.Response) {
+export const getAllCriteria: RequestHandler = async (req, res) => {
   let items: Criteria[] = await CriteriaDefinitionModel.find();
   items = items.map((item) => {
     return {
@@ -142,9 +140,9 @@ export async function getAllCriteria(req: express.Request, res: express.Response
     };
   });
   res.json(items);
-}
+};
 
-export async function getCriteriaForName(req: express.Request, res: express.Response) {
+export const getCriteriaForName: RequestHandler<{name: string}> = async (req, res) => {
   let criteria: Criteria | null = await CriteriaDefinitionModel.findOne({
     title: req.params.name,
   })
@@ -158,9 +156,9 @@ export async function getCriteriaForName(req: express.Request, res: express.Resp
       _id: criteria._id,
     });
   }
-}
+};
 
-export async function getNavigationCriteria(req: express.Request, res: express.Response) {
+export const getNavigationCriteria: RequestHandler = async (req, res) => {
   type NavigationStats = { _id: Schema.Types.ObjectId; assessmentCount: number; title?: string };
   let items: NavigationStats[] = await CriteriaAssessmentModel.aggregate([
     {
@@ -174,7 +172,9 @@ export async function getNavigationCriteria(req: express.Request, res: express.R
   ]).exec();
   const criteriaMap = createCriteriaMap(await CriteriaDefinitionModel.find());
   items.forEach((c) => {
-    c.title = criteriaMap.get(c._id.toString())!.title;
+    if (c._id) {
+      c.title = criteriaMap.get(c._id.toString())!.title;
+    }
   });
   res.json(items);
-}
+};

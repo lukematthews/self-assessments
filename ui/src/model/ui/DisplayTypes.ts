@@ -7,5 +7,19 @@ export type NavigationCriteria = {
     assessmentCount: number
 }
 
+export type CriteriaAssessmentWithTitle = {
+    id: string,
+    title: string,
+    criteriaId: string,
+    assessmentDate: string,
+    value: string,
+}
+
+export type CriteriaAssessmentCreateRequest = {
+    criteriaId: string,
+    assessmentDate: string,
+    value: string,
+}
+
 export type CriteriaAssessmentUI = CriteriaAssessment & { date: Date };
-export type CriteriaUI =  Criteria & { actionsVisible: boolean };
+export type CriteriaUI = Criteria & { actionsVisible: boolean };

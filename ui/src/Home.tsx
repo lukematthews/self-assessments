@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { format, parse, parseISO } from "date-fns";
+import { format, parse } from "date-fns";
 import { ApiService } from "./ApiService";
 import "./Home.css";
 import AssessmentModal from "./AssessmentModal";
@@ -11,16 +11,12 @@ import CriteriaDisplay from "./CriteriaDisplay";
 import { AssessmentGroup, AssessmentWithTitle } from "./model/ui/AssessmentGroup";
 import { CriteriaUI } from "./model/ui/DisplayTypes";
 
-export function FormatDate(dateString: string, pattern: string) {
-  return format(parseISO(dateString), pattern ? pattern : "PPPP");
-}
-
-export default function Home() {
+const Home: React.FC<{}> = () => {
   const [assessments, setAssessments] = useState<AssessmentGroup[]>([]);
   const [itemRefDescriptions, setItemRefDescriptions] = useState<Criteria[]>([]);
   const [show, setShow] = useState(false);
   const [assessmentId, setAssessmentId] = useState<null | string>(null);
-  const [criteriaId, setCriteriaId] = useState<null | string>("");
+  const [criteriaId, setCriteriaId] = useState<null | string>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [criteriaVisibility, setCriteriaVisibility] = useState<Map<string, boolean>>(new Map());
 
@@ -94,13 +90,13 @@ export default function Home() {
               .filter((item: AssessmentWithTitle) => criteriaVisibility.get(item.criteriaId))
               .map((item: AssessmentWithTitle) => {
                 return (
-                  <Fragment key={item.id}>
+                  <Fragment key={item._id}>
                     <Button
                       variant="text"
                       onClick={() => {
-                        handleShow(item.id.toString());
+                        handleShow(item._id.toString());
                       }}
-                      data-assessment-id={item.id}
+                      data-assessment-id={item._id}
                     >
                       {item.title}
                     </Button>
@@ -113,7 +109,7 @@ export default function Home() {
     },
   ];
 
-  const rows: GridRowsProp = [...assessments];
+  const rows: GridRowsProp<AssessmentGroup> = [...assessments];
 
   return (
     <Container>
@@ -127,7 +123,7 @@ export default function Home() {
       </Row>
       <Row>
         <Col lg="12">
-          <DataGrid rows={rows} columns={columns} getRowHeight={() => "auto"} />
+          <DataGrid getRowId={(row:AssessmentGroup) => row._id} rows={rows} columns={columns} getRowHeight={() => "auto"} />
         </Col>
       </Row>
 
@@ -178,3 +174,5 @@ export default function Home() {
     </Container>
   );
 }
+
+export default Home;

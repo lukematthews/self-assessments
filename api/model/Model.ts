@@ -26,7 +26,7 @@ const criteriaDefinitionSchema = new Schema<Criteria>({
 });
 
 const criteriaAssessmentSchema: Schema = new Schema({
-  _id: { type: Schema.Types.ObjectId, required: true },
+  // _id: { type: Schema.Types.ObjectId, required: true },
   assessmentDate: {
     type: Date,
     required: true,

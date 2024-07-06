@@ -2,7 +2,7 @@ import Criteria from "./Criteria";
 import { format, parseISO } from "date-fns";
 
 export default class CriteriaAssessment {
-  _id: string;
+  _id: string | null;
   assessmentDate: string;
   value: string;
   criteria: Criteria;
@@ -19,8 +19,8 @@ export default class CriteriaAssessment {
     this.criteria = criteria;
   }
 
-  static FormatDate(dateString: string, pattern?: string) {
-    if (typeof pattern === "undefined") {
+  static FormatDate(dateString: string, pattern?: string | undefined) {
+    if (!pattern) {
         pattern = "PPPP";
     }
     return format(parseISO(dateString), pattern);

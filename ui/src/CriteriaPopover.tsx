@@ -9,7 +9,13 @@ import IconButton from "@mui/material/IconButton";
 import Criteria from "./model/Criteria";
 import AddIcon from "@mui/icons-material/Add";
 
-export default function CriteriaPopover({ criteria, visibleClicked, addClicked }: { criteria: Criteria; visibleClicked: (id: string, visible: boolean) => void, addClicked: (id: string) => void }) {
+interface CriteriaPopoverProps {
+  visibleClicked: (id: string, visible: boolean) => void;
+  addClicked: (id: string) => void;
+  criteria: Criteria;
+}
+
+const CriteriaPopover: React.FC<CriteriaPopoverProps> = (props) => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [visible, setVisible] = useState(true);
 
@@ -29,7 +35,7 @@ export default function CriteriaPopover({ criteria, visibleClicked, addClicked }
   return (
     <div className="criteria-popover">
       <Button aria-describedby={id} variant="contained" onClick={handleClick}>
-        {criteria.title}
+        {props.criteria.title}
         {!visible ? <VisibilityOffIcon style={{ paddingLeft: "10px" }} /> : <></>}
       </Button>
       <Popover
@@ -41,31 +47,36 @@ export default function CriteriaPopover({ criteria, visibleClicked, addClicked }
           vertical: "bottom",
           horizontal: "left",
         }}
+        style={{width: "50%"}}
       >
-        <Markdown>{criteria.formattedDescription}</Markdown>
-        <Typography px={2}></Typography>
-        <Typography px={2} py={0}>
-          Hide / Show
-          <IconButton
-            size="small"
-            color="primary"
-            onClick={() => {
-              setVisible(!visible);
-              visibleClicked(criteria._id.toString(), !visible);
-            }}
-          >
-            {visible ? <VisibilityIcon></VisibilityIcon> : <VisibilityOffIcon></VisibilityOffIcon>}
-          </IconButton>
-          <IconButton
-            color="success"
-            onClick={() => {
-              addClicked(criteria._id.toString());
-            }}
-          >
-            <AddIcon></AddIcon>
-          </IconButton>
-        </Typography>
+        <div style={{padding: "10px" }}>
+          <Markdown>{props.criteria.formattedDescription}</Markdown>
+          <Typography px={2}></Typography>
+          <Typography px={2} py={0}>
+            Hide / Show
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={() => {
+                setVisible(!visible);
+                props.visibleClicked(props.criteria._id.toString(), !visible);
+              }}
+            >
+              {visible ? <VisibilityIcon></VisibilityIcon> : <VisibilityOffIcon></VisibilityOffIcon>}
+            </IconButton>
+            <IconButton
+              color="success"
+              onClick={() => {
+                props.addClicked(props.criteria._id.toString());
+              }}
+            >
+              <AddIcon></AddIcon>
+            </IconButton>
+          </Typography>
+        </div>
       </Popover>
     </div>
   );
-}
+};
+
+export default CriteriaPopover;

@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactElement } from "react";
+import { useState, useEffect } from "react";
 import { ApiService } from "./ApiService";
 import { Col, Row } from "react-bootstrap";
 import CriteriaPopover from "./CriteriaPopover";
@@ -12,11 +12,14 @@ import Criteria from "./model/Criteria";
 import CriteriaAssessment from "./model/CriteriaAssessment";
 import { AssessmentGroup, AssessmentWithTitle } from "./model/ui/AssessmentGroup";
 import AssessmentModal from "./AssessmentModal";
+import { sortByString } from "./model/ui/utils";
+import { parse } from "date-fns";
+import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function AllPage() {
+const AllPage: React.FC<{}> = () => {
   const [criteria, setCriteria] = useState<Criteria[]>([]);
-  const [criteriaVisibility, setCriteriaVisibility] = useState<Map<string, boolean>>(new Map());
-  const [loadFailed, setLoadFailed] = useState(false);
+  const [criteriaVisibility, setCriteriaVisibility] = useState<Map<string, boolean>>(new Map<string, boolean>());
+  const [_loadFailed, setLoadFailed] = useState(false);
   const [assessments, setAssessments] = useState<AssessmentGroup[]>([]);
   const [show, setShow] = useState(false);
   const [assessmentId, setAssessmentId] = useState<null | string>(null);
@@ -28,7 +31,8 @@ export default function AllPage() {
   }, []);
 
   function loadCriteriaResults(response: Criteria[]) {
-    setCriteria(response);
+    const sortedCriteria = sortByString<Criteria>(response, (item: Criteria) => item.title);
+    setCriteria(sortedCriteria);
     const visibility = new Map<string, boolean>();
     response.forEach((c) => {
       visibility.set(c._id.toString(), true);
@@ -41,18 +45,22 @@ export default function AllPage() {
   }
 
   function groupAndFilterAssessments(assessments: AssessmentGroup[]) {
-    setAssessments(assessments);
+    setAssessments(assessments.sort((a, b) => parseDate(b.assessmentDate).getTime() - parseDate(a.assessmentDate).getTime()));
+  }
+
+  function parseDate(dateString: string): Date {
+    return parse(dateString, "yyyy-MM-dd", new Date());
   }
 
   function criteriaClicked(id: string, visible: boolean) {
-    const c = { ...criteriaVisibility };
+    const c = new Map(criteriaVisibility);
     c.set(id, visible);
     setCriteriaVisibility(c);
   }
 
   function hideAll() {
-    const c = { ...criteriaVisibility };
-    Object.keys(c).forEach((id) => c.set(id, false));
+    const c = new Map<string, boolean>(criteriaVisibility);
+    Array.from(c.entries()).forEach((id) => c.set(id[0], false));
     setCriteriaVisibility(c);
   }
 
@@ -70,16 +78,17 @@ export default function AllPage() {
     setShow(false);
   }
 
-  function renderAssessments(aa: AssessmentWithTitle[]): JSX.Element {
-    // return new AssessmentList(aa)
-    return new AssessmentList2<AssessmentWithTitle>(aa)
+  function renderAssessments(aa: AssessmentWithTitle[]) {
+    return new AssessmentList<AssessmentWithTitle>(aa)
       .filterAssessments((item: AssessmentWithTitle) => criteriaVisibility.get(item.criteriaId))
-      .sortByCriteriaName()
-      .map<ReactElement>((a: AssessmentWithTitle) => {
+      .sortByCriteriaName((item: AssessmentWithTitle) => item.title)
+      .getList()
+      .map((a: AssessmentWithTitle, index: number) => {
         return (
-          <Accordion key={`${a.id} ${a.criteriaId}`}>
+          <Accordion key={`${index} ${a.criteriaId}`}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ backgroundColor: purple[50] }}>
               <Typography>{a.title}</Typography>
+              <DeleteIcon></DeleteIcon>
             </AccordionSummary>
             <AccordionDetails>
               <div>
@@ -118,12 +127,20 @@ export default function AllPage() {
       </Row>
       <Row className="py-2">
         <Col lg="12">
-          <Button variant="contained" onClick={hideAll}>
-            Hide All
-          </Button>
-          <Button variant="contained" onClick={hideAll}>
-            Add
-          </Button>
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={1}>
+              <Grid item>
+                <Button variant="contained" onClick={hideAll}>
+                  Hide All
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button variant="contained" onClick={hideAll}>
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
         </Col>
       </Row>
       <Row>
@@ -142,38 +159,16 @@ export default function AllPage() {
       </Row>
       <Row>
         <Col>
-          <AssessmentModal show={show} handleClose={handleClose} handleShow={handleShow} assessmentId={assessmentId} criteriaId={criteriaId} itemRefDescriptions={criteria}></AssessmentModal>
+          <AssessmentModal show={show} handleClose={handleClose} handleShow={handleShow} assessmentId={assessmentId} criteriaId={criteriaId!} itemRefDescriptions={criteria}></AssessmentModal>
         </Col>
       </Row>
     </>
   );
-}
+};
 
-class AssessmentList {
-  private list: AssessmentWithTitle[];
+export default AllPage;
 
-  constructor(list: AssessmentWithTitle[]) {
-    this.list = list;
-  }
-
-  filterAssessments(criteriaVisibility: Map<string, boolean>) {
-    this.list = this.list.filter((a) => criteriaVisibility.get(a.criteriaId));
-    return this;
-  }
-
-  sortByCriteriaName() {
-    this.list = this.list.sort((a, b) => (a.title > b.title ? 1 : b.title > a.title ? -1 : 0));
-    return this;
-  }
-
-  map<T>(cb: (value: AssessmentWithTitle) => ReactElement) {
-    return this.list.map(cb) as T;
-  }
-}
-
-type TitleAndCriteria = {title: string, criteriaId: string};
-
-class AssessmentList2<T extends TitleAndCriteria> {
+class AssessmentList<T> {
   private list: T[];
 
   constructor(list: T[]) {
@@ -186,11 +181,11 @@ class AssessmentList2<T extends TitleAndCriteria> {
   }
 
   sortByCriteriaName(getter: (item: T) => string) {
-    this.list = this.list.sort((a, b) => (getter(a) > getter(b) ? 1 : getter(b) > getter(a) ? -1 : 0));
+    this.list = sortByString<T>(this.list, getter);
     return this;
   }
 
-  map<T>(cb: (value: T, index: number, array: T[]) => ReactElement) {
-    return this.list.map(cb) as T;
+  getList() {
+    return this.list;
   }
 }

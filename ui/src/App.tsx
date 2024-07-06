@@ -3,8 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import SideNavigation from "./SideNavigation";
 import { purple } from "@mui/material/colors";
 
-function App() {
-
+const App:React.FC<{}> = () => {
   return (
     <Container>
       <Row style={{ backgroundColor: purple[800], color: "white" }}>

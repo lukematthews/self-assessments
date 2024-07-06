@@ -1,7 +1,8 @@
-export type AssessmentWithTitle = { id: string; title: string; criteriaId: string; value: string };
+export type AssessmentWithTitle = { _id: string; title: string; criteriaId: string; value: string };
 
 export type AssessmentGroup = {
-  id: number;
+  _id: number;
+  id?: string;
   assessmentDate: string;
   title: string;
   assessments: AssessmentWithTitle[];

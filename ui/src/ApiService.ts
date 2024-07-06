@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { format } from "date-fns";
 import CriteriaAssessment from "./model/CriteriaAssessment";
 import Criteria from "./model/Criteria";
 import { AssessmentGroup } from "./model/ui/AssessmentGroup";
 import { CriteriaAssessmentUpdateRequest } from "./model/ui/CriteriaAssessmentUpdateRequest";
-import { NavigationCriteria } from "./model/ui/DisplayTypes";
+import { CriteriaAssessmentCreateRequest, NavigationCriteria } from "./model/ui/DisplayTypes";
 
 export class ApiService {
   async FetchTemplate(setTemplate: (assessment: CriteriaAssessment) => void) {
@@ -33,13 +33,17 @@ export class ApiService {
     return response.data;
   }
 
+  static async FetchCriteriaById(id: string, setCriteria: (criteria: Criteria) => void) {
+    await axios.get<Criteria>(`/api/items/${id}`).then(response => setCriteria(response.data));
+  }
+
   static async FetchAssessmentsForCriteria(id: string, setAssessments: (assessments: CriteriaAssessment[]) => void) {
     const response = await axios.get(`/ui/assessments/criteria/${id}`);
     setAssessments(response.data);
     return response.data;
   }
 
-  static CreateNewAssessment(event: CriteriaAssessment, successCallback: (assessment: CriteriaAssessment) => void, errorCallback: (error: Error) => void) {
+  static CreateNewAssessment(event: CriteriaAssessmentCreateRequest, successCallback: (assessment: CriteriaAssessment) => void, errorCallback?: (error: AxiosError) => void) {
     const newAssessment = { ...event };
     axios
       .post<CriteriaAssessment>("/api/", newAssessment)
@@ -60,11 +64,11 @@ export class ApiService {
     });
   }
 
-  static UpdateAssessment(event: CriteriaAssessmentUpdateRequest, successCallback: () => void) {
+  static UpdateAssessment(event: CriteriaAssessmentUpdateRequest, successCallback: (assessment: CriteriaAssessment) => void) {
     const newAssessment = { ...event };
-    axios.put<CriteriaAssessmentUpdateRequest>("/api/", newAssessment).then(() => {
+    axios.put<CriteriaAssessment>("/api/", newAssessment).then((response) => {
       if (successCallback) {
-        successCallback();
+        successCallback(response.data);
       }
     });
   }

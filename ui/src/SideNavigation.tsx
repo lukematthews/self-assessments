@@ -6,12 +6,18 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import { ApiService } from "./ApiService";
 import { purple } from "@mui/material/colors";
 import { NavigationCriteria } from "./model/ui/DisplayTypes";
+import { sortByString } from "./model/ui/utils";
+import { useSelector } from "react-redux";
+import { AssessmentModificationProps } from "./redux/AssessmentReducer";
 
-export default function SideNavigation() {
+const SideNavigation:React.FC<{}> = () => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(true);
     const [itemRefDescriptions, setItemRefDescriptions] = useState<NavigationCriteria[]>([]);
-    const [loadFailed, setLoadFailed] = useState(false);
+    const [_loadFailed, setLoadFailed] = useState(false);
+
+    const modified = useSelector<AssessmentModificationProps>(state => state.modified);
+    const deleted = useSelector<AssessmentModificationProps>(state => state.modified);
 
     const handleClick = () => {
         setOpen(!open);
@@ -19,17 +25,16 @@ export default function SideNavigation() {
 
     useEffect(() => {
         ApiService.FetchNavigation(loadCriteriaResults, criteriaDefinitionsErrorCallback);
-    }, []);
+    }, [modified]);
 
     const loadCriteriaResults = (response: NavigationCriteria[]) => {
-        setItemRefDescriptions(response);
+        setItemRefDescriptions(sortByString<NavigationCriteria>(response, (item) => item.title))
     };
 
     const criteriaDefinitionsErrorCallback = (error: string) => {
         console.log(error);
         setLoadFailed(true);
     }
-
 
     return (<>
         <List
@@ -74,3 +79,5 @@ export default function SideNavigation() {
         <List>
         </List></>);
 }
+
+export default SideNavigation;
