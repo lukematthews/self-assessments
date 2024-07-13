@@ -1,0 +1,347 @@
+{
+  "areas": [
+    {
+      "area": "Planning Skills",
+      "description": "A massive set of time management and/or project management skills that help us get a realistic perception of the time, energy and steps necessary to /\"execute/\" or accomplish a goal/task. This includes planning one/'s day, using a calendar, planner or agenda to plan long-term, scheduling, planning one's writing/essays/papers, etc. Planning is how we break down and chunk tasks into subtasks or babysteps.",
+      "questions": [
+        "A lot of late work, incomplete assignments, zeroes, missing work, misses deadlines.",
+        "Unaware of upcoming responsibilities or events.",
+        "Does things at the last minute. Says, \"I don't like planning. Planners don't work for me. I don't need to write it down, I'll remember it.\" Or, \"the teacher has it online already.\"",
+        "Approaches homework randomly or chaotically, without a plan.",
+        "Wastes a lot of time, takes forever to do things.",
+        "Time blindness. Unrealistic perception of the time, energy and steps needed to accomplish things.",
+        "Essays go all over the place"
+      ],
+      "luke": {
+        "colour": "aqua",
+        "score": [8, 10, 9, 2, 10, 4, 0]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 7, 7, 7, 10, 8, 5]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [10, 6, 5, 9, 10, 6, 10]
+      },
+      "easyWinsActions": [
+        {
+          "questions": [
+            "A lot of late work, incomplete assignments, zeroes, missing work, misses deadlines.",
+            "Unaware of upcoming responsibilities or events.",
+            "Does things at the last minute. Says, \"I don't like planning. Planners don't work for me. I don't need to write it down, I'll remember it.\" Or, \"the teacher has it online already.\""
+          ],
+          "actions": [
+            "\"Check Your Work\" It probably only takes a couple of minutes, but checking what I've just done can save time and hassle from mistakes",
+            "\"Diary\" This has been working well, but I have never been doing the 'What do I need to do to be ready?' part well.",
+            "Lean in. I may not want to do something but suck it up and get it done. Succeeding and following through is empowering and helps me become dependable.",
+            "Do things when I say that I am going to do it. As part of this, truly understand how long it is going to take me to finish whatever it is that I am doing so that I know that I can stand to the time I say that I will be done. Is 'I'll be there in 15' actually mean that? Don't use 'In a minute' EVER."
+          ]
+        }
+      ]
+    },
+    {
+      "area": "Organization skills",
+      "description": "How we create \"organizational systems\" to keep track of things or do things, that are organized enough so we can execute to meet our goals.",
+      "questions": [
+        "Disorganized, messy backpacks, lockers, desks, bedrooms.",
+        "Lots of piles.",
+        "Loses school papers, papers not in the right folders, notes not in the right notebook, disorganized note taking.",
+        "Forgets things a lot.",
+        "Doesn't know where to start, disorganized written assignments, disorganized thoughts."
+      ],
+      "luke": {
+        "colour": "blue",
+        "score": [5, 5, 2, 10, 0]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 10, 10, 6]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [10, 10, 10, 4, 9]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Prioritization skills",
+      "description": "Executing/doing the important thing over the preferred fun or easier thing, when it matters. Decision making skills.",
+      "questions": [
+        "Avoids starting things they don't feel like doing.",
+        "Distracted by the fun, easy things and puts things off.",
+        "Great excuses and arguments to justify procrastinating. \"I'll do it later, I promise, trust me!\" but it doesn't get done or is done last minute rushed, and of poor quality."
+      ],
+      "luke": {
+        "colour": "blueviolet",
+        "score": [10, 10, 9]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 8]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [8, 8, 5]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Focus, Attention, Concentration Skills",
+      "description": "To be \"on task\". Ability to manage and sustain attention while executing a task until finished. Resist temptation to shift to preferred things. Able to avoid distractions. Able to redirect thoughts to the task at hand.",
+      "questions": [
+        "Unfocused, distractible, not paying attention, lack of concentration, off task, daydreams a lot.",
+        "Needs a lot of redirection.",
+        "Misses important details, doesn't know what the homework is, doesn't know what they were just reading.",
+        "Wastes a lot of time, takes forever to finish."
+      ],
+      "luke": {
+        "colour": "cadetblue",
+        "score": [8, 2, 4, 7]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 10, 10]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [3, 3, 8, 8]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Inhibitory Skills",
+      "description": "In order to focus, we must also build skills for \"self-control\" or \"self-management\" to resist or inhibit distractions. Inhibition is about one's ability to hold back, to pause, to think before acting/speaking, to slow down and not be impulsive, to have self-restraint when it matters. Inhibition is the opposite of impulsivity or hyperactivity. Inhibitory skills help us focus by inhibiting thoughts, emotions, behaviors that are inappropriate for the setting, or that go against our long term well-being and goals.",
+      "questions": [
+        "Doesn't inhibit distractions, gets derailed, off track, off task.",
+        "Can't delay gratification, poor self-monitoring, mindless choices.",
+        "No filter, calls out the answers, blurts things out inappropriately.",
+        "Doesn't think before acting.",
+        "Bad decisions, gets into trouble or bad situations, may harm others, risky behavior."
+      ],
+      "luke": {
+        "colour": "chocolate",
+        "score": [10, 9, 8, 8, 10]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 5, 8, 5]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [3, 4, 4, 3, 8]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Task Initiation Skills",
+      "description": "Now, if we can focus and inhibit, we're ready to initiate, self-start, activate, get the ball rolling, get the train moving, or begin execution of the important tasks.",
+      "questions": [
+        "Doesn't know how to \"initiate\" or where to get started.",
+        "Wastes a lot of time. Not productive.",
+        "Procrastination, labeled as lazy, unmotivated.",
+        "Creative excuses, homework arguments.",
+        "Doesn't prepare or have a runway for starting tasks by getting organized and making a plan first, so lacks an awareness of where a good starting point might be."
+      ],
+      "luke": {
+        "colour": "cornflowerblue",
+        "score": [2, 7, 7, 8, 5]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [5, 10, 10, 10, 8]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [9, 10, 9, 9, 10]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Task Persistence Skills",
+      "description": "Follow through. Continuing to try until finished, working to full task completion, stick with it, perseverance, persistence, self-regulates to sustain attention, effort, execution.",
+      "questions": [
+        "Starts but doesn't finish, or finishes but doesn't turn it in.",
+        "Gives up, gets derailed.",
+        "A lot of missing, late, or incomplete work, zero's.",
+        "Often doing test corrections.",
+        "Might know the content, but doesn't produce or turn in work.",
+        "Doesn't actually \"study\".",
+        "Struggles with reading assignments that require focused persistence"
+      ],
+      "luke": {
+        "colour": "crimson",
+        "score": [8, 2, 5, 0, 4, 5, 5]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 10, 0, 0, 10, 10]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [9, 10, 9, 10, 6, 6, 3]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Transition Skills",
+      "description": "The flexibility to shift from activity to activity effectively. Adaptable, can change gears. Includes getting from one class to another on time, being prepared, getting out of the house in the morning on time with everything needed, even how we transition from one grade level to another.",
+      "questions": [
+        "Transitions can be bumpy.",
+        "Trouble getting places on time.",
+        "Unprepared. Forgets things during transitions.",
+        "Frustrated with change, lack good routines.",
+        "Hard to get back on track in a new setting."
+      ],
+      "luke": {
+        "colour": "cyan",
+        "score": [8, 1, 2, 0, 7]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [5, 4, 4, 5, 8]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [8, 10, 10, 8, 10]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Working Memory Skills",
+      "description": "Verbal self-talk and visual imagery strategies that help us \"keep things in mind\" as we work through things. Like juggling balls, these are short-term memory skills. Able to track important details during a process.",
+      "questions": [
+        "Doesn't know what the homework is or the important details of it.",
+        "Forgets what they are doing.",
+        "Trouble taking good notes.",
+        "Trouble with multistep directions.",
+        "Trouble with math facts or mental math.",
+        "Misremembers: \"I turned it in, I know I did, I specifically remember turning it in\", then it turns up in the bottom of the backpack weeks later because it was never turned it."
+      ],
+      "luke": {
+        "colour": "green",
+        "score": [0, 0, 0, 2, 5, 7]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 8, 4, 5, 5, 10]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [10, 3, 10, 10, 4, 3]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Emotional Regulation Skills",
+      "description": "Having healthy tools to regulate emotional states, to stay focused on the tasks at hand. Ability to manage and work through challenging emotions. Mindfully aware of thoughts and feelings. Has understanding of emotional needs and a vocabulary to describe these things objectively. Not ruled by emotions, the nervous system or the narrative. Responsive more than reactive.",
+      "questions": [
+        "Resistant!",
+        "Stressed, overwhelmed, dysregulated nervous system, adrenal fatigue.",
+        "Lacks tools to process emotions, lacks emotional vocabulary.",
+        "Fight, flight, freeze. Polyvagal theory.",
+        "Avoidant, withdrawn, shut down.",
+        "Reactive.",
+        "Angry, mad, short fuse, running hot.",
+        "Anxious, depressed, intense."
+      ],
+      "luke": {
+        "colour": "mediumpurple",
+        "score": [10, 8, 7, 9, 9, 9, 10, 10]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 8, 10, 10, 10, 10, 10]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [10, 1, 1, 3, 1, 1, 1]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Metacognitive Skills",
+      "description": "Self-awareness, introspective, reflective, mindful awareness, conscious of what we are doing. Self monitoring. Thinking about thinking. Self evaluation skills to learn from mistakes and successes. Ability to take a step back and reflect and problem solve. Also refers to self-checking the quality of work, monitor progress. Self control, self regulation.",
+      "questions": [
+        "Denial and lacks a realistic awareness about one's challenges. \"This school year will be different, this semester I'm turning over a new leaf\" but not aware of lagging skills.",
+        "Unaware of what does or does not work. Doesn't look back purposefully and say, \"wow, that works, I should do that more. And that isn't working, I should change it.\"",
+        "Doesn't want help,\"Leave me alone, get off my back, I've got this, why don't you trust me? I can figure it out. I'll deal with it later, it'll take me 5 minutes.\"",
+        "Avoids dealing with things."
+      ],
+      "luke": {
+        "colour": "orange",
+        "score": [8, 7, 8, 4]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 10, 10]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [2, 2, 3, 2]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Skills to Move through Resistance",
+      "description": "This is crucial, and is all about emotional regulation and \"fear\" of feeling uncomfortable doing the non-preferred task. Any approach to EF coaching that does not help with the resistance, is missing the boat. These are skills that must be built.",
+      "questions": [
+        "The core problem my students contend with is how to work with the resistance: Resistance to receiving help, implementing strategies that would help, to using planners effectively, to doing non-preferred homework or responsibilities that need to get done, to starting things early, and to countless other things that would make life easier and get us closer to our goals.",
+        "Avoidance, procrastination, unwillingness, unmotivated, excuses, arguments.",
+        "\"I don't wanna, I don't feel like it. This sucks, this is dumb or stupid, why do I have to do this?\""
+      ],
+      "luke": {
+        "colour": "skyblue",
+        "score": [8, 9, 0]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [10, 10, 10]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [4, 3, 3]
+      },
+      "easyWinsActions": []
+    },
+    {
+      "area": "Self-care Skills",
+      "description": "While \"self-care\" isn't exactly an executive function \"skill\", I listed it because one's ability to practice good self care habits has a massive impact on EF, and requires EF. Restful sleep, food that actually nourishes the body, adequate exercise.",
+      "questions": [
+        "Not rested, electronics interfering with sleep, poor sleep hygiene.",
+        "Irregular routines.",
+        "Lack of exercise, movement, sunlight.",
+        "Doesn't eat enough healthy food. Eats a lot of processed foods, chips, candy, breads, food with chemicals and dyes.",
+        "Poor posture.",
+        "Not showering regularly, brushing teeth, cleaning clothes.",
+        "Picking, cutting, biting nails, self-harm."
+      ],
+      "luke": {
+        "colour": "yellow",
+        "score": [1, 0, 0, 1, 0, 0, 9]
+      },
+      "karen": {
+        "colour": "red",
+        "score": [6, 3, 0, 4, 0, 0, 7]
+      },
+      "easyWins": {
+        "description": "10: Quick Wins 0: Hard Work",
+        "colour": "blue",
+        "score": [9, 10, 0, 8, 0, 10, 9]
+      },
+      "easyWinsActions": []
+    }
+  ]
+}
