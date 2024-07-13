@@ -13,7 +13,7 @@ export interface CriteriaAssessment {
   criteria: Criteria;
 }
 
-const criteriaDefinitionSchema = new Schema<Criteria>({
+export const criteriaDefinitionSchema = new Schema<Criteria>({
   _id: { type: Schema.Types.ObjectId, required: true },
   title: {
     type: String,
@@ -25,7 +25,7 @@ const criteriaDefinitionSchema = new Schema<Criteria>({
   },
 });
 
-const criteriaAssessmentSchema: Schema = new Schema({
+export const criteriaAssessmentSchema: Schema = new Schema({
   // _id: { type: Schema.Types.ObjectId, required: true },
   assessmentDate: {
     type: Date,

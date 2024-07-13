@@ -1,6 +1,7 @@
 import express from "express";
 import { Criteria, CriteriaDefinitionModel } from "../model/Model";
 import { CreateCriteriaRequest } from "../model/ControllerTypes";
+import mongoose from "mongoose";
 
 export async function getAllCriteria(req: express.Request, res: express.Response) {
   const items = await CriteriaDefinitionModel.find();
@@ -19,7 +20,11 @@ export async function createNewItems(req: express.Request, res: express.Response
   let results: Criteria[] = [];
   let criteriaRequests: CreateCriteriaRequest[] = req.body.items;
   criteriaRequests.forEach((criteriaRequest) => {
-    CriteriaDefinitionModel.create({ title: criteriaRequest.title, description: criteriaRequest.description }).then((data) => results.push(data));
+    CriteriaDefinitionModel.create({
+      _id: new mongoose.Types.ObjectId(),
+      title: criteriaRequest.title,
+      description: criteriaRequest.description,
+    }).then((data) => results.push(data));
   });
 
   console.log(results);

@@ -59,7 +59,7 @@ export class ApiService {
   }
 
   static DeleteAssessment(id: string, successCallback: () => void) {
-    axios.delete<CriteriaAssessment>(`/api`, { data: { id: id } }).then(() => {
+    axios.delete<CriteriaAssessment>(`/api/${id}`, { data: { id: id } }).then(() => {
       successCallback ? successCallback() : "";
     });
   }
